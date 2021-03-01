@@ -1,5 +1,6 @@
 extends Position2D
 
+var velocity = Vector2.ZERO
 var speed = 2 
 onready var VP = get_viewport()
 
@@ -11,8 +12,16 @@ func _ready():
 	pass
 
 func _process(_delta):
-	position = VP.get_mouse_position()
-	position.x = clamp(position.x, 0, VP.get_visible_rect().size.x)
-	position.y = clamp(position.y, 0, VP.get_visible_rect().size.y)
-	if Input.is_action_pressed(shoot1):
+	velocity += get_input()*speed
+	poition += velocity
+	if position.x >= 1024:
+		velocity = Vector2.ZERO
+		position.x = 1024
+	if position.x <= 0:
+		velocity = Vector2.ZERO
+		position.x = 0
+		
+	if Input.is_action_pressed("Fire1"):
 		var missle = Missle.instance()
+		missle.position = position
+		Bullets.add_child(Missle)
