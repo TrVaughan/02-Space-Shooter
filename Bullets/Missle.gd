@@ -8,6 +8,8 @@ func _ready():
 func _physics_process(_delta):
 	position += velocity 
 	velocity.y -= speed 
+	if position.y <0:
+		queue_free()
 
 
 func _on_Missle_area_shape_entered(body):
