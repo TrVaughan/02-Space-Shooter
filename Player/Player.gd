@@ -1,10 +1,11 @@
-extends Position2D
+extends KinematicBody2D
 
 var velocity = Vector2.ZERO
-var speed = 2 
+var speed = .5
 onready var VP = get_viewport()
 
 var Missle = load("res://Bullets/Missle.tscn")
+var Nuke = load("res://Bullets/Nuke_scene.tscn")
 onready var Bullets = get_node("/root/Game/Bullets")
 
 
@@ -20,11 +21,15 @@ func _physics_process(_delta):
 	if position.x <= 0:
 		velocity = Vector2.ZERO
 		position.x = 0
-		
+
 	if Input.is_action_just_pressed("Fire1"):
 		var missle = Missle.instance()
 		missle.position = position
 		Bullets.add_child(missle)
+	if Input.is_action_just_pressed("Fire2"):
+		var Nuke_summon = Nuke.instance()
+		Nuke_summon.position = position
+		Bullets.add_child(Nuke_summon)
 
 func get_input():
 	var input_vector =  Vector2.ZERO 
@@ -32,9 +37,7 @@ func get_input():
 		input_vector.x = input_vector.x -1
 	if Input.is_action_pressed("right"):
 		input_vector.x = input_vector.x +1
-	if Input.is_action_pressed("up"):
-		input_vector.y = input_vector.y -1
-	if Input.is_action_pressed("down"):
-		input_vector.y = input_vector.y +1
 	return input_vector
-	
+
+func die(_s):
+	queue_free()
